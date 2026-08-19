@@ -1,21 +1,3 @@
-/**
- * "Backend" fake para as tarefas: implementa a mesma interface usada pelo
- * axios real (métodos get/post/patch/delete que devolvem { data }, e
- * erros com err.response.data.detail), mas tudo em memória/localStorage,
- * sem nenhuma requisição de rede.
- *
- * Mantém as mesmas regras do backend real:
- *  - exige "autenticação" (sessão local válida) -> senão, erro 401
- *  - cada usuário só vê/edita suas próprias tarefas
- *  - título é obrigatório -> senão, erro 422
- *  - 404 para tarefa inexistente / de outro usuário
- *
- * QUANDO O BACKEND FASTAPI ESTIVER NO AR:
- * troque o conteúdo de `src/api.js` para voltar a usar axios apontando
- * para VITE_API_URL. Nenhum outro arquivo (Tasks.jsx, TaskForm.jsx etc.)
- * precisa mudar, pois a interface (api.get/post/patch/delete) é a mesma.
- */
-
 import { localAuth } from './localAuth'
 
 const TASKS_KEY = 'demo_task_manager_tasks'

@@ -1,21 +1,3 @@
-/**
- * Auth "fake" para desenvolvimento do frontend isolado, sem depender do
- * Supabase nem de nenhum backend real.
- *
- * Implementa o mesmo formato de retorno usado pelo SDK do Supabase
- * (getSession / onAuthStateChange / signUp / signInWithPassword / signOut),
- * então o resto do app (AuthContext, Login) não precisa saber que é mock.
- *
- * Dados ficam em localStorage, então persistem entre reloads da página,
- * mas são 100% locais ao navegador — não há rede envolvida.
- *
- * QUANDO FOR LIGAR NO SUPABASE DE VERDADE:
- * troque o conteúdo de `src/supabaseClient.js` para usar
- * `createClient(...)` do '@supabase/supabase-js' novamente. Nenhum outro
- * arquivo do app precisa mudar, pois a interface (`supabase.auth.*`) é a
- * mesma.
- */
-
 const USERS_KEY = 'demo_task_manager_users'
 const SESSION_KEY = 'demo_task_manager_session'
 
@@ -61,7 +43,6 @@ function notifyListeners(session) {
   listeners.forEach((callback) => callback('SIGNED_IN', session))
 }
 
-// Simula latência de rede para o app se comportar como se fosse remoto
 function delay(ms = 300) {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }

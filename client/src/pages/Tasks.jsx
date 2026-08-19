@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import api from '../api'
+import { listTasks, createTask, updateTask, deleteTask } from '../api'
 import Alert from '../components/Alert'
 import TaskForm from '../components/TaskForm'
 import TaskList from '../components/TaskList'
@@ -19,8 +19,8 @@ export default function Tasks() {
   const loadTasks = async () => {
     setLoading(true)
     try {
-      const response = await api.get('/tasks')
-      setTasks(response.data)
+      const data = await listTasks()
+      setTasks(data)
     } catch (err) {
       setError(errorMessage(err))
     } finally {
@@ -30,7 +30,6 @@ export default function Tasks() {
 
   useEffect(() => {
     loadTasks()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleCreateOrUpdate = async (taskData) => {
@@ -38,10 +37,10 @@ export default function Tasks() {
     setSuccess('')
     try {
       if (editingTask) {
-        await api.patch(`/tasks/${editingTask.id}`, taskData)
+        await updateTask(editingTask.id, taskData)
         setSuccess('Tarefa atualizada com sucesso.')
       } else {
-        await api.post('/tasks', taskData)
+        await createTask(taskData)
         setSuccess('Tarefa criada com sucesso.')
       }
       setEditingTask(null)
@@ -55,7 +54,7 @@ export default function Tasks() {
     setError('')
     setSuccess('')
     try {
-      await api.delete(`/tasks/${taskId}`)
+      await deleteTask(taskId)
       setSuccess('Tarefa excluída com sucesso.')
       await loadTasks()
     } catch (err) {

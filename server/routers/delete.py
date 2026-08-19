@@ -29,14 +29,16 @@ def delete(dados: deleteRequest, credentials: HTTPAuthorizationCredentials = Dep
         )
 
     user_id = user.id
+    supabase.postgrest.auth(token)
 
     try:
-        response = (
+       response = (
             supabase
-            .table("Tarefa")
+            .table("tarefa")
             .delete()
             .eq("id", dados.id)
             .eq("user_fk", user_id)
+            .select("id, titulo, descricao, data_limite, prioridade, status")
             .execute()
         )
 
@@ -49,7 +51,7 @@ def delete(dados: deleteRequest, credentials: HTTPAuthorizationCredentials = Dep
     if not response.data:
         raise HTTPException(
             status_code=404,
-            detail="Tarefa não encontrada ou não pertence ao usuário"
+            detail="Tarefa não encontrada"
         )
 
     return {

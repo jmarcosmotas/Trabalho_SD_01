@@ -13,7 +13,7 @@ def login(dados: LoginRequest):
             "email": dados.email,
             "password": dados.password
         })
-
+        print(f"\nResposta do servidor {response}\n")
         return {
             "message": "Login realizado com sucesso",
             "access_token": response.session.access_token,
@@ -35,7 +35,7 @@ def cadastrar(dados: LoginRequest):
             "email": dados.email,
             "password": dados.password
         })
-
+        print(f"\nResposta do servidor {response}\n")
         if response.user is None:
             raise HTTPException(
                 status_code=400,

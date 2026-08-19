@@ -27,12 +27,13 @@ def read(credentials: HTTPAuthorizationCredentials = Depends(security)):
         )
 
     user_id = user.id
-
+    supabase.postgrest.auth(token)
+    
     try:
         response = (
             supabase
-            .table("Tarefa")
-            .select("*")
+            .table("tarefa")
+            .select("id, titulo, descricao, data_limite, prioridade, status")
             .eq("user_fk", user_id)
             .execute()
         )
@@ -42,7 +43,6 @@ def read(credentials: HTTPAuthorizationCredentials = Depends(security)):
             status_code=500,
             detail=f"Erro ao buscar tarefas: {str(e)}"
         )
-
     return {
         "message": "Tarefas encontradas com sucesso",
         "tarefas": response.data

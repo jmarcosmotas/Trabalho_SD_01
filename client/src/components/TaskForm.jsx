@@ -60,6 +60,7 @@ export default function TaskForm({ initialTask, onSubmit, onCancel }) {
             type="date"
             value={dueDate || ''}
             onChange={(e) => setDueDate(e.target.value)}
+            required
           />
         </div>
 

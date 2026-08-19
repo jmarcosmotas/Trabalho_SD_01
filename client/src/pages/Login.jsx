@@ -1,14 +1,18 @@
 import { useState } from 'react'
 import Alert from '../components/Alert'
-import { supabase } from '../supabaseClient'
+import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
-  const [mode, setMode] = useState('login') // 'login' | 'cadastro'
+  const { signIn, signUp } = useAuth()
+  const [mode, setMode] = useState('login') 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [info, setInfo] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const errorMessage = (err) =>
+    err?.response?.data?.detail || 'Ocorreu um erro ao comunicar com o servidor.'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -16,21 +20,19 @@ export default function Login() {
     setInfo('')
     setLoading(true)
 
-    const action =
-      mode === 'login'
-        ? supabase.auth.signInWithPassword({ email, password })
-        : supabase.auth.signUp({ email, password })
-
-    const { error: authError } = await action
-    setLoading(false)
-
-    if (authError) {
-      setError(authError.message)
-      return
-    }
-
-    if (mode === 'cadastro') {
-      setInfo('Cadastro realizado. Verifique seu email para confirmar a conta, se necessário.')
+    try {
+      if (mode === 'login') {
+        await signIn({ email, password })
+      } else {
+        await signUp({ email, password })
+        setInfo('Cadastro realizado com sucesso. Faça login para continuar.')
+        setMode('login')
+        setPassword('')
+      }
+    } catch (err) {
+      setError(errorMessage(err))
+    } finally {
+      setLoading(false)
     }
   }
 
