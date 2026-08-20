@@ -33,6 +33,26 @@ Para remover os containers em execução:
 docker compose down
 ```
 
+
+## Capturas de Tela
+
+<details>
+  <summary><b>Visualizar as telas da aplicação</b></summary>
+  <br />
+  <h4>1. Autenticação</h4>
+  <p align="center">
+    <img src="./.github/assets/login.png" alt="Login" />
+    <img src="./.github/assets/criar-conta.png" alt="Criar Conta" />
+  </p>
+
+  <h4>2. Gerenciamento de Tarefas</h4>
+  <p align="center">
+    <img src="./.github/assets/tela-principal.png" alt="Painel Inicial" />
+    <img src="./.github/assets/tarefas-criadas.png" alt="Tarefas Criadas" />
+  </p>
+</details>
+
+
 ## Suíte de Testes Automatizados (Pytest)
 ### Como Instalar as Dependências de Teste
 - Acessar o diretório server/
