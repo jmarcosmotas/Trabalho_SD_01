@@ -2,7 +2,6 @@ from unittest.mock import MagicMock, patch
 
 #Teste de Cadastro 
 def test_cadastrar_sucesso(client):
-    """Testa o cadastro de um novo usuário com sucesso."""
     mock_auth_response = MagicMock()
     mock_auth_response.user = MagicMock(id="user-123", email="novo@exemplo.com")
 
@@ -17,7 +16,6 @@ def test_cadastrar_sucesso(client):
 
 
 def test_cadastrar_falha(client):
-    """Testa a falha no cadastro de usuário (ex: já cadastrado)."""
     with patch("routers.auth.supabase.auth.sign_up", side_effect=Exception("User already registered")):
         response = client.post(
             "/cadastrar",
@@ -30,7 +28,6 @@ def test_cadastrar_falha(client):
 
 #Testes de Login
 def test_login_sucesso(client):
-    """Testa o login com credenciais válidas retornando o access_token."""
     mock_session = MagicMock()
     mock_session.access_token = "fake-jwt-token"
 
@@ -55,7 +52,6 @@ def test_login_sucesso(client):
 
 
 def test_login_credenciais_invalidas(client):
-    """Testa tentativa de login com credenciais incorretas."""
     with patch("routers.auth.supabase.auth.sign_in_with_password", side_effect=Exception("Invalid login credentials")):
         response = client.post(
             "/login",
@@ -67,6 +63,5 @@ def test_login_credenciais_invalidas(client):
 
 
 def test_login_campos_faltando(client):
-    """Testa a validação do FastAPI/Pydantic quando falta a senha."""
     response = client.post("/login", json={"email": "teste@exemplo.com"})
     assert response.status_code == 422

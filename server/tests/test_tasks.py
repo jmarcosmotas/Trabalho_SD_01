@@ -2,13 +2,11 @@ from unittest.mock import MagicMock, patch
 
 # Testes de Autorização / Segurança 
 def test_rota_protegida_sem_token(client):
-    """Testa se requisições sem o cabeçalho Authorization são bloqueadas."""
     response = client.get("/read")
     assert response.status_code == 401  
 
 
 def test_rota_protegida_token_invalido(client):
-    """Testa a rejeição quando o Supabase não valida o token informado."""
     with patch("routers.read.supabase.auth.get_user", side_effect=Exception("Invalid token")):
         headers = {"Authorization": "Bearer token_invalido"}
         response = client.get("/read", headers=headers)
@@ -18,7 +16,6 @@ def test_rota_protegida_token_invalido(client):
 
 #Testes de Listagem
 def test_listar_tarefas_sucesso(client, auth_headers):
-    """Testa a listagem de tarefas retornando os registros do usuário autenticado."""
     mock_user_resp = MagicMock()
     mock_user_resp.user.id = "user-123"
 
@@ -51,7 +48,6 @@ def test_listar_tarefas_sucesso(client, auth_headers):
 
 #Teste de Criação
 def test_criar_tarefa_sucesso(client, auth_headers):
-    """Testa a criação de uma nova tarefa com dados válidos."""
     mock_user_resp = MagicMock()
     mock_user_resp.user.id = "user-123"
 
@@ -87,7 +83,6 @@ def test_criar_tarefa_sucesso(client, auth_headers):
 
 #Testes de Atualização
 def test_atualizar_tarefa_sucesso(client, auth_headers):
-    """Testa a atualização bem-sucedida dos dados de uma tarefa existente."""
     mock_user_resp = MagicMock()
     mock_user_resp.user.id = "user-123"
 
@@ -123,7 +118,6 @@ def test_atualizar_tarefa_sucesso(client, auth_headers):
 
 
 def test_atualizar_tarefa_nao_encontrada(client, auth_headers):
-    """Testa o retorno 404 quando se tenta atualizar uma tarefa inexistente ou de outro usuário."""
     mock_user_resp = MagicMock()
     mock_user_resp.user.id = "user-123"
 
@@ -153,7 +147,6 @@ def test_atualizar_tarefa_nao_encontrada(client, auth_headers):
 
 #Teste de Exclusão
 def test_deletar_tarefa_sucesso(client, auth_headers):
-    """Testa a exclusão de uma tarefa do usuário autenticado."""
     mock_user_resp = MagicMock()
     mock_user_resp.user.id = "user-123"
 
